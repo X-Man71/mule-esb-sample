@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:json="http://www.mulesoft.org/schema/mule/json"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.6.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+
+   <http:listener-config name="HTTP_Listener_Configuration" host="localhost" port="8181" doc:name="HTTP Listener Configuration"/>
+    <flow name="rest-jsonFlow">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="foo" allowedMethods="POST" responseStreamingMode="NEVER" doc:name="HTTP"/>
+        <echo-component doc:name="Echo"/>
+        <choice doc:name="Choice">
+            <when expression="#[message.payload == 1]">
+                <logger message="1: #[payload]" level="INFO" doc:name="1"/>
+            </when>
+            <when expression="#[message.payload == 2]">
+                <logger message="2: #[payload]" level="INFO" doc:name="2"/>
+            </when>
+            <when expression="#[message.payload == 3]">
+                <logger message="2: #[payload]" level="INFO" doc:name="3"/>
+            </when>
+            <otherwise>
+                <logger message="Default: #[payload]" level="INFO" doc:name="Default"/>
+            </otherwise>
+        </choice>
+    </flow>
+
+</mule>
