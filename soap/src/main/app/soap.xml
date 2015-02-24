@@ -11,6 +11,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
     <http:request-config name="HTTP_Request_Configuration" host="localhost" port="8181" doc:name="HTTP Request Configuration"/>
     <http:listener-config name="HTTP_Listener_Configuration" host="localhost" port="8181" doc:name="HTTP Listener Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration1" host="192.168.56.101" port="8080" doc:name="HTTP Request Configuration"/>
     <flow name="soapFlow" initialState="started">
         <http:listener config-ref="HTTP_Listener_Configuration" path="foo" allowedMethods="POST" doc:name="HTTP"/>
         <echo-component doc:name="Echo"/>
@@ -19,8 +20,8 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
           <set-payload value="#[{new java.lang.Double('1000.00'),java.lang.Integer.parseInt('5'),new java.lang.String('a')}]" doc:name="Normalize Payload for VBank"></set-payload>  
         <echo-component doc:name="Echo"/>
         <processor-chain doc:name="Schufa SOAP"> 
-                    <cxf:jaxws-client operation="getCreditRate" clientClass="soap.VBankService" port="VBankPort" wsdlLocation="http://192.168.56.101:8080/VBankService/services/VBankPort?wsdl" doc:name="SOAP"></cxf:jaxws-client>  
-                    <http:outbound-endpoint exchange-pattern="request-response" method="POST" address="http://192.168.56.101:8080/VBankService/services/VBankPort" doc:name="HTTP"></http:outbound-endpoint>  
+                    <cxf:jaxws-client operation="getCreditRate" clientClass="soap.VBankService" port="VBankPort" wsdlLocation="http://192.168.56.101:8080/VBankService/services/VBankPort?wsdl" doc:name="SOAP"></cxf:jaxws-client>
+            <http:request config-ref="HTTP_Request_Configuration1" path="VBankService/services/VBankPort" method="POST" doc:name="HTTP"/>   
                 </processor-chain>  
         <echo-component doc:name="Echo"/>
     </flow>
