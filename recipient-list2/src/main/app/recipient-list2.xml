@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:json="http://www.mulesoft.org/schema/mule/json"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.6.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+<http:listener-config name="HTTP_Listener_Configuration" host="localhost" port="8181" doc:name="HTTP Listener Configuration"/>
+    <flow name="recipient-listFlow">    
+     <http:listener config-ref="HTTP_Listener_Configuration" path="foo" allowedMethods="POST" doc:name="HTTP"/>
+        <json:json-to-object-transformer returnClass="java.util.ArrayList" doc:name="JSON to Object"/>
+        <echo-component doc:name="Echo"/>
+        <logger message="#[payload[0]] und #[payload[1]] und #[payload[2]]" level="INFO" doc:name="Logger"/>
+          <foreach collection="#[payload]" doc:name="For Each">
+            <choice doc:name="Choice">
+                <when expression="#[rootMessage.payload[counter - 1] == '1']">
+                    <logger message="Choice Variable is One" level="INFO" doc:name="Logger"/>
+                </when>
+                <when expression="#[rootMessage.payload[counter - 1] == '2']">
+                    <logger message="Choice Variable is Two" level="INFO" doc:name="Logger"/>
+                </when>
+                <otherwise>
+                    <logger message="Choice Variable is Default" level="INFO" doc:name="Logger"/>
+                </otherwise>
+            </choice>
+        </foreach>
+      
+      
+    </flow>
+
+</mule>
