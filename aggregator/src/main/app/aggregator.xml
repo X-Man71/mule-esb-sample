@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:json="http://www.mulesoft.org/schema/mule/json"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.6.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+<http:listener-config name="HTTP_Listener_Configuration" host="localhost" port="8181" doc:name="HTTP Listener Configuration"/>
+    <flow name="recipient-listFlow">    
+     <http:listener config-ref="HTTP_Listener_Configuration" path="foo" allowedMethods="POST" doc:name="HTTP" responseStreamingMode="NEVER"/>
+        <json:json-to-object-transformer doc:name="JSON to Object" returnClass="json.Payload"/>
+        <echo-component doc:name="Echo"/>
+        <component class="aggregator.CorrelationGroupSize" doc:name="Java"/>
+        <set-property propertyName="MULE_CORRELATION_ID" value="#[payload.getCorrelationId()]" doc:name="MULE_CORRELATION_ID"/>
+        <logger message="ID: #[payload.getCorrelationId()] Choice: #[payload.getCount()]" level="INFO" doc:name="Logger"/>
+        <collection-aggregator timeout="20000" failOnTimeout="false" doc:name="Collection Aggregator"/>
+        <logger message="Collection: #[payload.getClass()]" level="INFO" doc:name="Logger"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+        <echo-component doc:name="Echo"/>      
+    </flow>
+</mule>
