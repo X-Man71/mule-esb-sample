@@ -19,10 +19,10 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
           <foreach collection="#[payload]" doc:name="For Each">
             <choice doc:name="Choice">
                 <when expression="#[rootMessage.payload[counter - 1] == '1']">
-                    <logger message="Choice Variable is One" level="INFO" doc:name="Logger"/>
+                    <logger message="Choice Variable is One" level="INFO" doc:name="Logger 1"/>
                 </when>
                 <when expression="#[rootMessage.payload[counter - 1] == '2']">
-                    <logger message="Choice Variable is Two" level="INFO" doc:name="Logger"/>
+                    <logger message="Choice Variable is Two" level="INFO" doc:name="Logger 2"/>
                 </when>
                 <otherwise>
                     <logger message="Choice Variable is Default" level="INFO" doc:name="Logger"/>

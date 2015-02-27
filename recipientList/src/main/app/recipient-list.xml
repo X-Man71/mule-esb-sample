@@ -18,13 +18,15 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         <foreach collection="#[payload.getChoice()]" doc:name="For Each">
             <choice doc:name="Choice">
                 <when expression="#[rootMessage.payload.getChoice() == '1']">
-                    <logger message="Choice Variable is One" level="INFO" doc:name="Logger"/>
+                    <set-payload value="#[flowVars['rootMessage'].getPayload()]" doc:name="Set Payload"/>
+                    <logger message="Choice Variable is One: #[payload.getChoice()]" level="INFO" doc:name="Logger 1"/>
                 </when>
                 <when expression="#[rootMessage.payload.getChoice() == '2']">
-                    <logger message="Choice Variable is Two" level="INFO" doc:name="Logger"/>
+                    <set-payload value="#[flowVars['rootMessage'].getPayload()]" doc:name="Set Payload"/>
+                    <logger message="Choice Variable is Two #[payload.getChoice()]" level="INFO" doc:name="Logger 2"/>
                 </when>
                 <otherwise>
-                    <logger message="Choice Variable is Default" level="INFO" doc:name="Logger"/>
+                    <logger message="Choice Variable is Default" level="INFO" doc:name="Logger Default"/>
                 </otherwise>
             </choice>
         </foreach>
