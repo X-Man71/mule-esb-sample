@@ -2,6 +2,19 @@
 
 Das Repository enthält diverse Beispiele und zeigt wie Enterprise Integration Patterns mithilfe des MuleESB realisiert werden können.
 
+# Einarbeitung in die Beispiel
+
+Da die Beispiele bezüglich Umfang aufeinander Aufbauen wird im folgenden eine Reihenfolge empfohlen um sich in die Beispiele einzuarbeiten:
+- rest-json
+- rest-json-variable
+- rest-json-property
+- recipientList
+- recipient-list2
+- enricher
+- choice
+- aggregator
+- soap
+
 ## Testen der Beispiele
 
 Die Anwendungen nehmen Daten im JSON Format über eine HTTP Adresse entgegen.
