@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:json="http://www.mulesoft.org/schema/mule/json"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.6.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+  <http:request-config name="HTTP_Request_Configuration" host="localhost" port="8181" doc:name="HTTP Request Configuration"/>
+    <http:listener-config name="HTTP_Listener_Configuration" host="localhost" port="8181" doc:name="HTTP Listener Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration1" host="192.168.56.101" port="8080" doc:name="HTTP Request Configuration"/>
+    <jms:connector name="JMSBankA" validateConnections="true" jndiInitialFactory="org.exolab.jms.jndi.InitialContextFactory" jndiProviderUrl="tcp://192.168.56.101:3035/" connectionFactoryJndiName="ConnectionFactory" doc:name="JMS" forceJndiDestinations="true" jndiDestinations="true" specification="1.1"></jms:connector>
+    <flow name="soapFlow" initialState="started">
+          <http:inbound-endpoint name="clientEndpoint" address="http://localhost:8080/foo" doc:name="HTTP"/>
+        <echo-component doc:name="Echo"/>
+        <json:json-to-object-transformer returnClass="jms.model.ARequest" doc:name="JSON to Object"/>
+        <logger message="ARequest: #[payload.getRequestId() payload.getAmount() payload.getTerm() payload.getConsumerRate()]" level="INFO" doc:name="Logger"/>
+        <echo-component doc:name="Echo"/>
+       <jms:outbound-endpoint doc:name="sendJMSMessageToBank" connector-ref="JMSBankA" topic="requestBankA"></jms:outbound-endpoint>  
+    </flow>
+    <flow name="openjmsFlow">
+           <jms:inbound-endpoint doc:name="Recive JMS Messages" connector-ref="JMSBankA" topic="responseBank"></jms:inbound-endpoint>  
+        <logger level="INFO" doc:name="Logger" message="AResonse: #[payload.getBankName() payload.getRequestId() payload.getQuoteRate()]"/>
+    </flow>
+
+</mule>
