@@ -23,7 +23,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
                 <logger message="2: #[payload]" level="INFO" doc:name="2"/>
             </when>
             <when expression="#[message.payload == 3]">
-                <logger message="2: #[payload]" level="INFO" doc:name="3"/>
+                <logger message="3: #[payload]" level="INFO" doc:name="3"/>
             </when>
             <otherwise>
                 <logger message="Default: #[payload]" level="INFO" doc:name="Default"/>
