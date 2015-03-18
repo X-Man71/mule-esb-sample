@@ -1,0 +1,26 @@
+# REST JSON Property
+
+
+## Funktionsweise der Anwendung
+
+Die Anwendung nimmt eine JSON Objekt entgegen, bildet dies auf eine Java Objekt ab und gibt wiederum den Inhalt auf der Console aus.
+
+## Betrieb/Test der Anwendung
+
+Der ESB wurde mithilfe der XML Datei src/main/app/rest-json-property.xml konfiguriert.
+
+Ein JSON Objekte wird unter der [Adresse](http://localhost:8181/foo) entgegengenommen.
+Die JSON Nachricht sollte als HTTP POST im Body verschickt werden und folgendes Format einhalten:
+
+{ "id":1, "email":"Test@Test.de", "username":"Test", "password":"Test", "firstname":"TestVorname", "lastname":"TestNachname" }
+
+Dadurch kann das JSON Objekt auf das Java Objekt rest.json.User abgebildet werden. 
+Vom User Objekt wird wiederum das Id Feld verwendet und als Property gesetzt.
+
+Die CorrelationId wird benötigt zum Aggregieren von Nachrichten
+
+
+
+
+ 
+
